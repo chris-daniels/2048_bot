@@ -137,3 +137,14 @@ HTMLActuator.prototype.clearMessage = function () {
   this.messageContainer.classList.remove("game-won");
   this.messageContainer.classList.remove("game-over");
 };
+
+HTMLActuator.prototype.updateSolveButton = function(automaticallySolving){
+  var solveButton = document.querySelector(".solve-button");
+  
+  if(automaticallySolving){
+      solveButton.innerHTML = "Stop Solving";
+  }
+  else {
+      solveButton.innerHTML = "Solve Game";
+  }
+}

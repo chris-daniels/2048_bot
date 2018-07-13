@@ -60,6 +60,9 @@ KeyboardInputManager.prototype.listen = function () {
         event.preventDefault();
         self.emit("move", mapped);
       }
+      else if(event.which === 81){
+        self.emit("toggleAutoSolve");
+      }
     }
 
     // R key restarts the game
@@ -72,6 +75,7 @@ KeyboardInputManager.prototype.listen = function () {
   this.bindButtonPress(".retry-button", this.restart);
   this.bindButtonPress(".restart-button", this.restart);
   this.bindButtonPress(".keep-playing-button", this.keepPlaying);
+  this.bindButtonPress(".solve-button", this.toggleAutoSolve);
 
   // Respond to swipe events
   var touchStartClientX, touchStartClientY;
@@ -135,6 +139,11 @@ KeyboardInputManager.prototype.restart = function (event) {
 KeyboardInputManager.prototype.keepPlaying = function (event) {
   event.preventDefault();
   this.emit("keepPlaying");
+};
+
+KeyboardInputManager.prototype.toggleAutoSolve = function (event) {
+  event.preventDefault();
+  this.emit("toggleAutoSolve");
 };
 
 KeyboardInputManager.prototype.bindButtonPress = function (selector, fn) {

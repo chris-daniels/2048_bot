@@ -3,12 +3,14 @@ function GameManager(size, InputManager, Actuator, StorageManager) {
   this.inputManager   = new InputManager;
   this.storageManager = new StorageManager;
   this.actuator       = new Actuator;
+  this.gameSolver     = new GameSolver;
 
   this.startTiles     = 2;
 
   this.inputManager.on("move", this.move.bind(this));
   this.inputManager.on("restart", this.restart.bind(this));
   this.inputManager.on("keepPlaying", this.keepPlaying.bind(this));
+  this.inputManager.on("toggleAutoSolve", this.toggleAutoSolve.bind(this));
 
   this.setup();
 }
@@ -270,3 +272,33 @@ GameManager.prototype.tileMatchesAvailable = function () {
 GameManager.prototype.positionsEqual = function (first, second) {
   return first.x === second.x && first.y === second.y;
 };
+
+GameManager.prototype.toggleAutoSolve = function () {
+
+  this.gameSolver.autoSolving = !this.gameSolver.autoSolving;
+
+  this.actuator.updateSolveButton(this.gameSolver.autoSolving);
+
+  if(this.gameSolver.autoSolving){
+    this.solve();
+  }
+
+};
+
+GameManager.prototype.solve = function () {
+
+  if(this.gameSolver.autoSolving){
+
+    if(this.isGameTerminated()){
+      this.toggleAutoSolve();
+    }
+    else {
+      var bestDirection = this.gameSolver.getBestMove(this.grid);
+
+      this.move(bestDirection);
+
+      setTimeout(() => this.solve(), 100);
+    }
+  }
+};
+
